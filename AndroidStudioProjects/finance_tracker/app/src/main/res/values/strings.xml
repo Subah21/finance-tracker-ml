@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">finance_tracker</string>
+    <string name="create_account">Create Account</string>
 </resources>
