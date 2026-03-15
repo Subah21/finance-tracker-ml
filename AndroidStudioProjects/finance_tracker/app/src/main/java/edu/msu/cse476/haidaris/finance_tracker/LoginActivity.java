@@ -44,7 +44,19 @@ public class LoginActivity extends AppCompatActivity {
 
                         if(task.isSuccessful()){
 
-                            startActivity(new Intent(this, DashboardActivity.class));
+                            if(auth.getCurrentUser().isEmailVerified()){
+
+                                startActivity(new Intent(this, VerificationActivity.class));
+                                finish();
+
+                            } else {
+
+                                Toast.makeText(this,
+                                        "Please verify your email first.",
+                                        Toast.LENGTH_LONG).show();
+
+                                auth.signOut();
+                            }
 
                         } else {
 
@@ -58,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
 
         signupText.setOnClickListener(v -> {
 
-            Intent intent = new Intent(LoginActivity.this, VerificationActivity.class);
+            Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
             startActivity(intent);
 
         });

@@ -39,12 +39,25 @@ public class SignupActivity extends AppCompatActivity {
 
                         if(task.isSuccessful()){
 
-                            Toast.makeText(this,"Account Created!",Toast.LENGTH_LONG).show();
+                            FirebaseAuth.getInstance().getCurrentUser()
+                                    .sendEmailVerification()
+                                    .addOnCompleteListener(task1 -> {
+
+                                        if(task1.isSuccessful()){
+                                            Toast.makeText(this,
+                                                    "Verification email sent! Check your inbox.",
+                                                    Toast.LENGTH_LONG).show();
+                                        } else {
+                                            Toast.makeText(this,
+                                                    "Failed to send verification email.",
+                                                    Toast.LENGTH_LONG).show();
+                                        }
+
+                                    });
 
                             startActivity(new Intent(this, LoginActivity.class));
                             finish();
-
-                        } else {
+                        }else {
 
                             Toast.makeText(this,
                                     "Signup Failed: " + task.getException().getMessage(),

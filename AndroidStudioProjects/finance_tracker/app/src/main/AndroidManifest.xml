@@ -12,17 +12,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Finance_tracker">
         <activity
-            android:name=".verification"
-            android:exported="false" />
+            android:name=".VerificationActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".DashboardActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".SignupActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".LoginActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
