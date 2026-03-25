@@ -25,18 +25,14 @@ public class DashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        // Get Firebase UID passed from LoginActivity
         firebaseUid = getIntent().getStringExtra("firebase_uid");
 
-        // Set up toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Set up ViewPager2 with 3 fragments
         ViewPager2 viewPager = findViewById(R.id.viewPager);
         viewPager.setAdapter(new DashboardPagerAdapter(this));
 
-        // Link TabLayout to ViewPager2
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
             switch (position) {
@@ -47,11 +43,8 @@ public class DashboardActivity extends AppCompatActivity {
         }).attach();
     }
 
-    // Toolbar menu
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu which adds the Logout to the top-right overflow menu
         getMenuInflater().inflate(R.menu.menu_dashboard, menu);
         return true;
     }
@@ -59,10 +52,8 @@ public class DashboardActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_logout) {
-            // Sign out from Firebase and clears the cached session
             FirebaseAuth.getInstance().signOut();
 
-            // Go back to LoginActivity, clear the back stack
             Intent intent = new Intent(this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
@@ -72,13 +63,9 @@ public class DashboardActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    // Getter for fragments
-
     public String getFirebaseUid() {
         return firebaseUid;
     }
-
-    // ViewPager2 Adapter
 
     private static class DashboardPagerAdapter extends FragmentStateAdapter {
 
@@ -89,9 +76,9 @@ public class DashboardActivity extends AppCompatActivity {
         @Override
         public Fragment createFragment(int position) {
             switch (position) {
-                case 0:  return new OverviewFragment();
-                case 1:  return new TransactionsFragment();
-                case 2:  return new BudgetFragment();
+                case 0: return new OverviewFragment();
+                case 1: return new TransactionsFragment();
+                case 2: return new BudgetFragment();
                 default: return new OverviewFragment();
             }
         }

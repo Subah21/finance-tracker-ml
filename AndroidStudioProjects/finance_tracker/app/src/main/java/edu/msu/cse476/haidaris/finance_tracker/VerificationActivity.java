@@ -34,13 +34,7 @@ public class VerificationActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
 
-        // If your layout still has codeInput, you can remove it — we don't need it
-        // Update your activity_verification.xml to show these instead:
-        //   - A text saying "Check your email and click the verification link"
-        //   - A button "I've verified my email" → checkVerifiedButton
-        //   - A button "Resend email" → resendButton
-
-        checkVerifiedButton = findViewById(R.id.verifyButton);  // reuse existing button ID
+        checkVerifiedButton = findViewById(R.id.verifyButton);
 
         checkVerifiedButton.setText("I've verified my email");
 
@@ -49,11 +43,9 @@ public class VerificationActivity extends AppCompatActivity {
             FirebaseUser user = auth.getCurrentUser();
 
             if (user != null) {
-                // Reload the user to get fresh verification status from Firebase
                 user.reload().addOnCompleteListener(task -> {
 
                     if (user.isEmailVerified()) {
-                        // Verified --> go to Dashboard
                         Intent intent = new Intent(this, DashboardActivity.class);
                         intent.putExtra("firebase_uid", user.getUid());
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
