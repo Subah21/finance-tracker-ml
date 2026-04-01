@@ -5,10 +5,7 @@ plugins {
 
 android {
     namespace = "edu.msu.cse476.haidaris.finance_tracker"
-    compileSdk {
-        version = release(36)
-    }
-
+    compileSdk = 36
     defaultConfig {
         applicationId = "edu.msu.cse476.haidaris.finance_tracker"
         minSdk = 28
@@ -42,7 +39,9 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.google.android.material:material:1.11.0")
     implementation(platform("com.google.firebase:firebase-bom:34.7.0"))
     implementation("com.google.firebase:firebase-auth")
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
 }

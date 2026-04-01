@@ -1,54 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main"
     android:orientation="vertical"
-    android:padding="20dp"
-    android:background="#F5F5F5"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#F5F5F5">
 
-    <TextView
-        android:text="Dashboard"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <com.google.android.material.card.MaterialCardView
+    <!-- Toolbar at the top -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-        app:cardCornerRadius="16dp">
+        android:layout_height="?attr/actionBarSize"
+        android:background="#1a1a2e"
+        android:elevation="4dp"
+        app:title="Finance Tracker"
+        app:titleTextColor="#FFFFFF" />
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:padding="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:text="Monthly Spending"
-                android:textSize="16sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:text="$0.00"
-                android:textSize="28sp"
-                android:textStyle="bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
+    <!-- Tab strip sits directly below toolbar -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        app:menu="@menu/bottom_nav_menu"/>
+        android:background="#1a1a2e"
+        app:tabTextColor="#AAAAAA"
+        app:tabSelectedTextColor="#FFFFFF"
+        app:tabIndicatorColor="#4FC3F7"
+        app:tabIndicatorHeight="3dp"
+        app:tabMode="fixed"
+        app:tabGravity="fill" />
+
+    <!-- Each tab's content is a Fragment loaded here -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>
