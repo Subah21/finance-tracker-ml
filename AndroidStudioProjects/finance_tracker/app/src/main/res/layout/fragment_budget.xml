@@ -20,6 +20,7 @@
             android:textStyle="bold"
             android:textColor="#222222" />
 
+        <!-- Monthly Budget -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -34,24 +35,25 @@
                 android:padding="16dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:text="Monthly Budget"
                     android:textSize="14sp"
-                    android:textColor="#666666" />
+                    android:textColor="#666666"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
                 <TextView
                     android:id="@+id/monthlyBudgetValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="$2,000"
+                    android:text="Loading..."
                     android:textSize="28sp"
                     android:textStyle="bold"
                     android:textColor="#111111" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Spent & Remaining -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -67,24 +69,24 @@
                 app:cardElevation="3dp">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:text="Spent"
                         android:textSize="14sp"
-                        android:textColor="#666666" />
+                        android:textColor="#666666"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
 
                     <TextView
                         android:id="@+id/spentValue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
-                        android:text="$850"
+                        android:text="—"
                         android:textSize="22sp"
                         android:textStyle="bold"
                         android:textColor="#111111" />
@@ -100,24 +102,24 @@
                 app:cardElevation="3dp">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:text="Remaining"
                         android:textSize="14sp"
-                        android:textColor="#666666" />
+                        android:textColor="#666666"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
 
                     <TextView
                         android:id="@+id/remainingValue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
-                        android:text="$1,150"
+                        android:text="—"
                         android:textSize="22sp"
                         android:textStyle="bold"
                         android:textColor="#111111" />
@@ -125,6 +127,7 @@
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 
+        <!-- Category Progress -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -133,26 +136,27 @@
             app:cardElevation="3dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:text="Category Progress"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:textColor="#222222" />
-
-                <TextView
+                    android:textColor="#222222"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_height="wrap_content"/>
+
+                <!-- Food -->
+                <TextView
                     android:text="Food"
+                    android:layout_marginTop="16dp"
                     android:textSize="14sp"
-                    android:textColor="#555555" />
+                    android:textColor="#555555"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
                 <ProgressBar
                     android:id="@+id/foodProgress"
@@ -161,15 +165,16 @@
                     android:layout_height="12dp"
                     android:layout_marginTop="6dp"
                     android:max="100"
-                    android:progress="65" />
+                    android:progress="0" />
 
+                <!-- Transport -->
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
                     android:text="Transportation"
+                    android:layout_marginTop="14dp"
                     android:textSize="14sp"
-                    android:textColor="#555555" />
+                    android:textColor="#555555"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
                 <ProgressBar
                     android:id="@+id/transportProgress"
@@ -178,15 +183,16 @@
                     android:layout_height="12dp"
                     android:layout_marginTop="6dp"
                     android:max="100"
-                    android:progress="45" />
+                    android:progress="0" />
 
+                <!-- Entertainment -->
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
                     android:text="Entertainment"
+                    android:layout_marginTop="14dp"
                     android:textSize="14sp"
-                    android:textColor="#555555" />
+                    android:textColor="#555555"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
                 <ProgressBar
                     android:id="@+id/entertainmentProgress"
@@ -195,10 +201,11 @@
                     android:layout_height="12dp"
                     android:layout_marginTop="6dp"
                     android:max="100"
-                    android:progress="80" />
+                    android:progress="0" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Forecast -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -208,25 +215,25 @@
             app:cardElevation="3dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:text="Forecast"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:textColor="#222222" />
+                    android:textColor="#222222"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
                 <TextView
                     android:id="@+id/forecastText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="You are likely to stay within budget this month."
+                    android:text="Loading..."
                     android:textSize="14sp"
                     android:textColor="#555555" />
 
