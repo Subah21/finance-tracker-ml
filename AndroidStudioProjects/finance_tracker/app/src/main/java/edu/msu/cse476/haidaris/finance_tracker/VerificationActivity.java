@@ -54,7 +54,8 @@ public class VerificationActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(this,
                                 "Email not verified yet. Check your inbox and click the link.",
-                                Toast.LENGTH_LONG).show();
+                                Toast.LENGTH_LONG
+                        ).show();
                     }
                 });
             }

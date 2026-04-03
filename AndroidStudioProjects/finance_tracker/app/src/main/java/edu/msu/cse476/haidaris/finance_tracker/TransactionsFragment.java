@@ -4,18 +4,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-/**
- * Tab 2 — will show a list of transactions + a button to add new ones.
- * Currently a placeholder. Next step is to add:
- *   - RecyclerView showing GET /transactions/{uid}
- *   - FloatingActionButton --> bottom sheet dialog to POST /transactions
- */
 public class TransactionsFragment extends Fragment {
 
     @Nullable
@@ -24,6 +19,12 @@ public class TransactionsFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_transactions, container, false);
+
+        Button addTransactionButton = view.findViewById(R.id.addTransactionButton);
+        addTransactionButton.setOnClickListener(v ->
+                Toast.makeText(requireContext(), "Add transaction feature coming next", Toast.LENGTH_SHORT).show()
+        );
+
         return view;
     }
 }
