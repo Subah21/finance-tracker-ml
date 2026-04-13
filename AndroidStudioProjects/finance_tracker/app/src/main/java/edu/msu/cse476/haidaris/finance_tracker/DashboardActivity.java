@@ -59,7 +59,7 @@ public class DashboardActivity extends AppCompatActivity
             }
         }).attach();
 
-        // Warning banner 
+        // Warning banner
         warningBanner = findViewById(R.id.warningBanner);
 
         // Set up notification channel
