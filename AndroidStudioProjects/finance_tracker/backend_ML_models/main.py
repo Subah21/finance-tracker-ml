@@ -134,7 +134,7 @@ def get_user_type(data: SpendingInput, db: Session = Depends(get_db)):
     }
 
     return {
-        "user_type": user_type,
+        "label":     user_type,
         "tip":       tips.get(user_type, "")
     }
 

@@ -40,10 +40,13 @@ public class ApiClient {
 
     private static final String TAG = "ApiClient";
 
-    // Base URL
-    // 10.0.2.2 = localhost on your PC when running in Android emulator
-    // Change to your PC's local IP (e.g. 192.168.1.x) for a real device
-    private static final String BASE_URL = "http://10.0.2.2:8000";
+    // Base URL — deployed on Google Cloud Run (works on any network)
+    private static final String BASE_URL = "https://finance-tracker-api-870049862947.us-central1.run.app";
+
+    /** Returns the base URL so other classes can build one-off requests. */
+    public static String getBaseUrl() {
+        return BASE_URL;
+    }
 
     // Single shared OkHttpClient which is reused across all requests
     private static final OkHttpClient client = new OkHttpClient();

@@ -21,8 +21,10 @@ from schemas import (
 
 app = FastAPI(title="Finance Tracker API", version="1.0")
 
-# ML server URL for now. we can change port if needed
-ML_SERVER = "http://localhost:8001"
+# ML server URL — reads from environment variable in Cloud Run,
+# falls back to localhost for local development
+import os
+ML_SERVER = os.getenv("ML_SERVER_URL", "http://localhost:8001")
 
 
 # Create all DB tables when server starts
@@ -248,11 +250,11 @@ async def get_predictions(data: PredictionRequest, db: Session = Depends(get_db)
         raise HTTPException(status_code=404, detail="User not found")
 
     payload = {
-        "user_id":             data.firebase_uid,
+        "firebase_uid":        data.firebase_uid,
         "income":              user.monthly_income,
         "total_spent":         data.total_spent,
-        "food_spend":          data.food_spend,
-        "entertainment_spend": data.entertainment_spend,
+        "food":                data.food_spend,
+        "entertainment":       data.entertainment_spend,
         "discretionary_spend": data.discretionary_spend
     }
 

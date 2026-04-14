@@ -139,6 +139,18 @@ public class OverviewFragment extends Fragment {
                         JSONObject riskJson = json.getJSONObject("risk");
                         JSONObject typeJson = json.getJSONObject("user_type");
 
+                        // ML server may be down — the objects will contain
+                        // an "error" key instead of real results
+                        if (riskJson.has("error") || typeJson.has("error")) {
+                            requireActivity().runOnUiThread(() -> {
+                                txtRiskPercent.setText("N/A");
+                                txtUserType.setText("N/A");
+                                txtRiskMessage.setText("ML server offline — start it on port 8001.");
+                                txtUserTypeTip.setText("");
+                            });
+                            return;
+                        }
+
                         double riskPercent = riskJson.getDouble("risk_percent");
                         boolean atRisk     = riskJson.getBoolean("at_risk");
                         String message     = riskJson.getString("message");

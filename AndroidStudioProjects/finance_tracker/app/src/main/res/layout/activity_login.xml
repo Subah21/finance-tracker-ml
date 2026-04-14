@@ -62,4 +62,12 @@
 
     </com.google.android.material.card.MaterialCardView>
 
+    <Button
+        android:id="@+id/demoButton"
+        android:text="Try Demo"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_marginTop="20dp"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"/>
+
 </LinearLayout>

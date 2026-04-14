@@ -44,7 +44,7 @@ public class LocationHelper {
     private static final String[] BIG_STORE_KEYWORDS = {
             "walmart", "target", "costco", "meijer", "kroger",
             "mall", "plaza", "shopping", "market", "store",
-            "best buy", "ikea", "kohl"
+            "best buy", "ikea", "kohl", "best buy"
     };
 
     private final Context             context;

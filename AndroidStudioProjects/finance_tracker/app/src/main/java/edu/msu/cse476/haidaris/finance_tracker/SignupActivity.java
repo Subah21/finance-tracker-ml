@@ -34,10 +34,8 @@ public class SignupActivity extends AppCompatActivity {
     // the above comment was generated using claude.
     OkHttpClient httpClient = new OkHttpClient();
 
-    // currently, this is my backend_API server address
-    // 10.0.2.2 = localhost on your PC when running in Android emulator
-    // I will need to change it to where any device can use the app.
-    static final String API_BASE_URL = "http://10.0.2.2:8000";
+    // Backend API deployed on Google Cloud Run (works on any network)
+    static final String API_BASE_URL = "https://finance-tracker-api-870049862947.us-central1.run.app";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
