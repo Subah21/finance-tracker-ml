@@ -41,7 +41,7 @@
         android:padding="12dp"
         android:gravity="center"
         android:visibility="gone"
-        android:text="" />
+        android:text="@string/empty" />
 
     <!-- Each tab's content is a Fragment loaded here -->
     <androidx.viewpager2.widget.ViewPager2
