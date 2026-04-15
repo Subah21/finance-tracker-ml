@@ -15,7 +15,7 @@
             android:id="@+id/budgetTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Budget Overview"
+            android:text="@string/budget_overview"
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="#222222" />
@@ -46,7 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="Loading..."
+                    android:text="@string/loading"
                     android:textSize="28sp"
                     android:textStyle="bold"
                     android:textColor="#111111" />
@@ -86,7 +86,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
-                        android:text="—"
+                        android:text="@string/placeholder"
                         android:textSize="22sp"
                         android:textStyle="bold"
                         android:textColor="#111111" />
@@ -119,7 +119,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
-                        android:text="—"
+                        android:text="@string/placeholder"
                         android:textSize="22sp"
                         android:textStyle="bold"
                         android:textColor="#111111" />
@@ -142,7 +142,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:text="Category Progress"
+                    android:text="@string/category_progress"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="#222222"
@@ -151,7 +151,7 @@
 
                 <!-- Food -->
                 <TextView
-                    android:text="Food"
+                    android:text="@string/food"
                     android:layout_marginTop="16dp"
                     android:textSize="14sp"
                     android:textColor="#555555"
@@ -169,7 +169,7 @@
 
                 <!-- Transport -->
                 <TextView
-                    android:text="Transportation"
+                    android:text="@string/transportation"
                     android:layout_marginTop="14dp"
                     android:textSize="14sp"
                     android:textColor="#555555"
@@ -187,7 +187,7 @@
 
                 <!-- Entertainment -->
                 <TextView
-                    android:text="Entertainment"
+                    android:text="@string/entertainment"
                     android:layout_marginTop="14dp"
                     android:textSize="14sp"
                     android:textColor="#555555"
@@ -221,7 +221,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:text="Forecast"
+                    android:text="@string/forecast"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="#222222"
@@ -233,7 +233,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="Loading..."
+                    android:text="@string/loading"
                     android:textSize="14sp"
                     android:textColor="#555555" />
 

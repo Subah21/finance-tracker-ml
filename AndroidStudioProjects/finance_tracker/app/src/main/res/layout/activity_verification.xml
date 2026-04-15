@@ -8,7 +8,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:text="Enter Verification Code"
+        android:text="@string/enter_verification_code"
         android:textSize="24sp"
         android:textStyle="bold"
         android:layout_width="wrap_content"
@@ -16,13 +16,13 @@
 
     <EditText
         android:id="@+id/codeInput"
-        android:hint="6-digit code"
+        android:hint="@string/verification_hint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <Button
         android:id="@+id/verifyButton"
-        android:text="Verify"
+        android:text="@string/verify"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

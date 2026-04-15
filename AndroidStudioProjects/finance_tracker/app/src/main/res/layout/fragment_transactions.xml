@@ -15,7 +15,7 @@
             android:id="@+id/transactionsTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Recent Transactions"
+            android:text="@string/recent_transactions"
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="#222222" />
@@ -36,7 +36,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Spent This Month"
+                    android:text="@string/spent_this_month"
                     android:textSize="14sp"
                     android:textColor="#666666" />
 
@@ -45,7 +45,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="Loading..."
+                    android:text="@string/loading"
                     android:textSize="28sp"
                     android:textStyle="bold"
                     android:textColor="#111111" />
@@ -56,7 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Activity"
+            android:text="@string/activity_label"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="#222222" />
@@ -84,7 +84,7 @@
                         android:id="@+id/transactionName1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="—"
+                        android:text="@string/placeholder"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#222222" />
@@ -94,7 +94,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Loading..."
+                        android:text="@string/loading"
                         android:textSize="13sp"
                         android:textColor="#777777" />
                 </LinearLayout>
@@ -103,7 +103,7 @@
                     android:id="@+id/transactionAmount1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="—"
+                    android:text="@string/placeholder"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="#222222" />
@@ -133,7 +133,7 @@
                         android:id="@+id/transactionName2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="—"
+                        android:text="@string/placeholder"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#222222" />
@@ -143,7 +143,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Loading..."
+                        android:text="@string/loading"
                         android:textSize="13sp"
                         android:textColor="#777777" />
                 </LinearLayout>
@@ -152,7 +152,7 @@
                     android:id="@+id/transactionAmount2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="—"
+                    android:text="@string/placeholder"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="#222222" />
@@ -182,7 +182,7 @@
                         android:id="@+id/transactionName3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="—"
+                        android:text="@string/placeholder"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#222222" />
@@ -192,7 +192,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Loading..."
+                        android:text="@string/loading"
                         android:textSize="13sp"
                         android:textColor="#777777" />
                 </LinearLayout>
@@ -201,7 +201,7 @@
                     android:id="@+id/transactionAmount3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="—"
+                    android:text="@string/placeholder"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="#222222" />
@@ -213,7 +213,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
-            android:text=""
+            android:text="@string/empty"
             android:textSize="13sp"
             android:textColor="#777777" />
 
@@ -223,7 +223,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="24dp"
-            android:text="Add Transaction" />
+            android:text="@string/add_transaction" />
 
     </LinearLayout>
 </ScrollView>

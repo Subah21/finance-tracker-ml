@@ -29,14 +29,14 @@
 
             <EditText
                 android:id="@+id/signupEmail"
-                android:hint="Email"
+                android:hint="@string/email"
                 android:minHeight="48dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
             <EditText
                 android:id="@+id/signupPassword"
-                android:hint="Password"
+                android:hint="@string/password"
                 android:inputType="textPassword"
                 android:minHeight="48dp"
                 android:layout_marginTop="10dp"
@@ -45,7 +45,7 @@
 
             <Button
                 android:id="@+id/signupButton"
-                android:text="Sign Up"
+                android:text="@string/sign_up"
                 android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>

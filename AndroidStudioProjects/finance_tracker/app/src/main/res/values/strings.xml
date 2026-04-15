@@ -4,15 +4,41 @@
     <string name="back">Back</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="loading">Loading…</string>
+    <string name="placeholder">—</string>
+    <string name="empty" />
 
     <!-- Login Screen -->
     <string name="app_name">finance_tracker</string>
-    <string name="create_account">Create Account</string>
     <string name="title">Finance Tracker</string>
     <string name="login">Login</string>
     <string name="signup_text">Don\'t have an account? Sign up!</string>
     <string name="demo">Try Demo</string>
 
+    <!-- Signup Screen -->
+    <string name="create_account">Create Account</string>
+    <string name="sign_up">Sign Up</string>
+
+    <!-- Verification Screen -->
+    <string name="enter_verification_code">Enter Verification Code</string>
+    <string name="verification_hint">6-digit code</string>
+    <string name="verify">Verify</string>
+
+    <!-- Main Screen -->
+    <string name="hello_world">Hello World!</string>
+
+    <!-- Overview Screen -->
+    <string name="safe_to_spend">Safe to spend</string>
+    <string name="income">Income</string>
+    <string name="overspending_risk">Overspending risk</string>
+    <string name="spending_type">Spending type</string>
+    <string name="ml_badge">ML</string>
+
+    <!-- Transactions Screen -->
+    <string name="recent_transactions">Recent Transactions</string>
+    <string name="spent_this_month">Spent This Month</string>
+    <string name="activity_label">Activity</string>
+    <string name="add_transaction">Add Transaction</string>
 
     <!-- Budget Screen -->
     <string name="budget_overview">Budget Overview</string>
@@ -20,4 +46,15 @@
     <string name="spent">Spent</string>
     <string name="remaining">Remaining</string>
     <string name="update_budget">Update Budget</string>
+    <string name="category_progress">Category Progress</string>
+    <string name="food">Food</string>
+    <string name="transportation">Transportation</string>
+    <string name="entertainment">Entertainment</string>
+    <string name="forecast">Forecast</string>
+
+    <!-- Budget Activity (placeholder values) -->
+    <string name="default_budget">$2000</string>
+    <string name="default_spent">$850</string>
+    <string name="default_remaining">$1150</string>
+
 </resources>

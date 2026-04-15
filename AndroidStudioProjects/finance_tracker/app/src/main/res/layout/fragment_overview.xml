@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:text="Safe to spend"
+                    android:text="@string/safe_to_spend"
                     android:textSize="12sp"
                     android:textColor="#888888"
                     android:textAllCaps="true"
@@ -38,7 +38,7 @@
 
                 <TextView
                     android:id="@+id/txtSafeToSpend"
-                    android:text="Loading..."
+                    android:text="@string/loading"
                     android:textSize="36sp"
                     android:textStyle="bold"
                     android:textColor="#0F6E56"
@@ -48,7 +48,7 @@
 
                 <TextView
                     android:id="@+id/txtIncomeSubtitle"
-                    android:text=""
+                    android:text="@string/empty"
                     android:textSize="13sp"
                     android:textColor="#888888"
                     android:layout_marginTop="4dp"
@@ -81,7 +81,7 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:text="Income"
+                        android:text="@string/income"
                         android:textSize="11sp"
                         android:textColor="#888888"
                         android:textAllCaps="true"
@@ -90,7 +90,7 @@
 
                     <TextView
                         android:id="@+id/txtIncome"
-                        android:text="—"
+                        android:text="@string/placeholder"
                         android:textSize="22sp"
                         android:textStyle="bold"
                         android:textColor="#1a1a2e"
@@ -125,7 +125,7 @@
 
                     <TextView
                         android:id="@+id/txtTotalSpent"
-                        android:text="—"
+                        android:text="@string/placeholder"
                         android:textSize="22sp"
                         android:textStyle="bold"
                         android:textColor="#1a1a2e"
@@ -165,7 +165,7 @@
                         android:layout_height="wrap_content">
 
                         <TextView
-                            android:text="Overspending risk"
+                            android:text="@string/overspending_risk"
                             android:textSize="11sp"
                             android:textColor="#888888"
                             android:textAllCaps="true"
@@ -174,7 +174,7 @@
 
                         <TextView
                             android:id="@+id/txtRiskPercent"
-                            android:text="—"
+                            android:text="@string/placeholder"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="#1a1a2e"
@@ -187,7 +187,7 @@
                     <!-- Risk level badge: Low / Medium / High -->
                     <TextView
                         android:id="@+id/txtRiskBadge"
-                        android:text=""
+                        android:text="@string/empty"
                         android:textSize="11sp"
                         android:textStyle="bold"
                         android:paddingStart="12dp"
@@ -213,7 +213,7 @@
 
                 <TextView
                     android:id="@+id/txtRiskMessage"
-                    android:text=""
+                    android:text="@string/empty"
                     android:textSize="12sp"
                     android:textColor="#555555"
                     android:layout_marginTop="8dp"
@@ -239,7 +239,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:text="Spending type"
+                    android:text="@string/spending_type"
                     android:textSize="11sp"
                     android:textColor="#888888"
                     android:textAllCaps="true"
@@ -254,7 +254,7 @@
 
                     <TextView
                         android:id="@+id/txtUserType"
-                        android:text="—"
+                        android:text="@string/placeholder"
                         android:textSize="22sp"
                         android:textStyle="bold"
                         android:textColor="#1a1a2e"
@@ -263,7 +263,7 @@
                         android:layout_height="wrap_content"/>
 
                     <TextView
-                        android:text="ML"
+                        android:text="@string/ml_badge"
                         android:textSize="10sp"
                         android:textColor="#185FA5"
                         android:textStyle="bold"
@@ -280,7 +280,7 @@
 
                 <TextView
                     android:id="@+id/txtUserTypeTip"
-                    android:text=""
+                    android:text="@string/empty"
                     android:textSize="12sp"
                     android:textColor="#555555"
                     android:layout_marginTop="4dp"
