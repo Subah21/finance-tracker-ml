@@ -15,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,10 +26,9 @@ public class TransactionsFragment extends Fragment {
     private String firebaseUid;
 
     private TextView totalSpentValue;
-    private TextView transactionName1, transactionMeta1, transactionAmount1;
-    private TextView transactionName2, transactionMeta2, transactionAmount2;
-    private TextView transactionName3, transactionMeta3, transactionAmount3;
     private TextView emptyTransactionsText;
+    private RecyclerView transactionsRecyclerView;
+    private TransactionAdapter adapter;
 
     /** Categories that match the backend's expected values. */
     private static final String[] CATEGORIES = {
@@ -43,17 +44,14 @@ public class TransactionsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_transactions, container, false);
 
         // Bind views
-        totalSpentValue     = view.findViewById(R.id.totalSpentValue);
-        transactionName1    = view.findViewById(R.id.transactionName1);
-        transactionMeta1    = view.findViewById(R.id.transactionMeta1);
-        transactionAmount1  = view.findViewById(R.id.transactionAmount1);
-        transactionName2    = view.findViewById(R.id.transactionName2);
-        transactionMeta2    = view.findViewById(R.id.transactionMeta2);
-        transactionAmount2  = view.findViewById(R.id.transactionAmount2);
-        transactionName3    = view.findViewById(R.id.transactionName3);
-        transactionMeta3    = view.findViewById(R.id.transactionMeta3);
-        transactionAmount3  = view.findViewById(R.id.transactionAmount3);
-        emptyTransactionsText = view.findViewById(R.id.emptyTransactionsText);
+        totalSpentValue         = view.findViewById(R.id.totalSpentValue);
+        emptyTransactionsText   = view.findViewById(R.id.emptyTransactionsText);
+        transactionsRecyclerView = view.findViewById(R.id.transactionsRecyclerView);
+
+        // Set up RecyclerView
+        adapter = new TransactionAdapter();
+        transactionsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        transactionsRecyclerView.setAdapter(adapter);
 
         // Get UID from parent
         firebaseUid = ((DashboardActivity) requireActivity()).getFirebaseUid();
@@ -85,13 +83,13 @@ public class TransactionsFragment extends Fragment {
         for (int i = 0; i < CATEGORIES.length; i++) {
             displayNames[i] = capitalize(CATEGORIES[i]);
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
                 requireContext(),
                 android.R.layout.simple_spinner_item,
                 displayNames
         );
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCategory.setAdapter(adapter);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCategory.setAdapter(spinnerAdapter);
 
         new AlertDialog.Builder(requireContext())
                 .setTitle(R.string.new_transaction)
@@ -202,70 +200,33 @@ public class TransactionsFragment extends Fragment {
                         try {
                             JSONArray arr = new JSONArray(body);
 
-                            // Show up to 3 most recent (API returns all, newest last)
                             requireActivity().runOnUiThread(() -> {
                                 if (arr.length() == 0) {
-                                    clearSlot(transactionName1, transactionMeta1, transactionAmount1);
-                                    clearSlot(transactionName2, transactionMeta2, transactionAmount2);
-                                    clearSlot(transactionName3, transactionMeta3, transactionAmount3);
                                     emptyTransactionsText.setText("No transactions yet.");
-                                    return;
+                                    transactionsRecyclerView.setVisibility(View.GONE);
+                                } else {
+                                    emptyTransactionsText.setText("");
+                                    transactionsRecyclerView.setVisibility(View.VISIBLE);
+                                    adapter.setTransactions(arr);
                                 }
-
-                                emptyTransactionsText.setText("");
-
-                                // Fill slots from most recent
-                                fillSlot(arr, arr.length() - 1, transactionName1, transactionMeta1, transactionAmount1);
-                                fillSlot(arr, arr.length() - 2, transactionName2, transactionMeta2, transactionAmount2);
-                                fillSlot(arr, arr.length() - 3, transactionName3, transactionMeta3, transactionAmount3);
                             });
 
                         } catch (Exception e) {
-                            clearAllSlots();
+                            requireActivity().runOnUiThread(() -> {
+                                emptyTransactionsText.setText("Could not load transactions.");
+                                transactionsRecyclerView.setVisibility(View.GONE);
+                            });
                         }
                     }
 
                     @Override
                     public void onFailure(String error) {
-                        clearAllSlots();
+                        requireActivity().runOnUiThread(() -> {
+                            emptyTransactionsText.setText("Could not reach server.");
+                            transactionsRecyclerView.setVisibility(View.GONE);
+                        });
                     }
                 });
-    }
-
-    private void fillSlot(JSONArray arr, int index,
-                           TextView name, TextView meta, TextView amount) {
-        if (index < 0 || index >= arr.length()) {
-            clearSlot(name, meta, amount);
-            return;
-        }
-        try {
-            JSONObject tx = arr.getJSONObject(index);
-            String desc     = tx.optString("description", "");
-            String category = tx.optString("category", "");
-            double amt      = tx.getDouble("amount");
-
-            name.setText(desc.isEmpty() ? capitalize(category) : desc);
-            meta.setText(capitalize(category));
-            amount.setText("-$" + String.format("%.2f", amt));
-        } catch (Exception e) {
-            clearSlot(name, meta, amount);
-        }
-    }
-
-    private void clearSlot(TextView name, TextView meta, TextView amount) {
-        name.setText("");
-        meta.setText("");
-        amount.setText("");
-    }
-
-    private void clearAllSlots() {
-        if (getActivity() != null) {
-            requireActivity().runOnUiThread(() -> {
-                clearSlot(transactionName1, transactionMeta1, transactionAmount1);
-                clearSlot(transactionName2, transactionMeta2, transactionAmount2);
-                clearSlot(transactionName3, transactionMeta3, transactionAmount3);
-            });
-        }
     }
 
     private void setFallback(TextView tv, String text) {
