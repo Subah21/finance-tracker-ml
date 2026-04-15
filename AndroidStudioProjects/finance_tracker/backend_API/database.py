@@ -1,23 +1,26 @@
 """
-Handles the SQLite database connection and defines all 4 tables.
+Handles the database connection and defines all 4 tables.
 
 To create the DB, this is called automatically when main.py starts.
-The file  finance_tracker.db  will appear in our backend_API folder.
+
+Supports both SQLite (local dev) and PostgreSQL (Cloud Run / production).
+Set the DATABASE_URL environment variable to switch databases:
+  - SQLite (default):  sqlite:///./finance_tracker.db
+  - Postgres:          postgresql://user:password@host/dbname
 """
 
+import os
 from sqlalchemy import (create_engine, Column, String, Float,
                          Boolean, DateTime, Integer, ForeignKey, func)
 from sqlalchemy.orm import sessionmaker, DeclarativeBase, relationship
 
-# Connection
-# I'm using SQLite for now. To switch to Postgres later, we just need to change this one line
-#   DATABASE_URL = "postgresql://user:password@host/dbname"
-DATABASE_URL = "sqlite:///./finance_tracker.db"
+# Connection — reads from env var for Cloud Run, falls back to SQLite for local dev
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./finance_tracker.db")
 
-engine = create_engine(
-    DATABASE_URL,
-    connect_args={"check_same_thread": False}  # needed for SQLite only
-)
+# SQLite needs check_same_thread=False; Postgres does not
+connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
+
+engine = create_engine(DATABASE_URL, connect_args=connect_args)
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
 

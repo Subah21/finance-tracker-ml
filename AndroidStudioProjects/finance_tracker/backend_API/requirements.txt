@@ -4,3 +4,4 @@ sqlalchemy
 httpx
 pydantic
 python-dotenv
+psycopg2-binary
