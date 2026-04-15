@@ -63,4 +63,10 @@
     <string name="default_spent">$850</string>
     <string name="default_remaining">$1150</string>
 
+    <!-- Set Budget Dialog -->
+    <string name="set_budget_limit">Set Budget Limit</string>
+    <string name="category_label">Category</string>
+    <string name="monthly_limit_label">Monthly Limit ($)</string>
+    <string name="limit_amount_hint">e.g. 500.00</string>
+
 </resources>

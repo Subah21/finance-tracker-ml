@@ -1,11 +1,15 @@
 package edu.msu.cse476.haidaris.finance_tracker;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,8 +20,6 @@ import androidx.fragment.app.Fragment;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.Iterator;
-
 public class BudgetFragment extends Fragment {
 
     private String firebaseUid;
@@ -25,11 +27,11 @@ public class BudgetFragment extends Fragment {
     private TextView monthlyBudgetValue, spentValue, remainingValue, forecastText;
     private ProgressBar foodProgress, transportProgress, entertainmentProgress;
 
-    // Store spending + budget data once loaded
     private double totalBudget = 0;
     private double totalSpent  = 0;
     private double foodSpent = 0, transportSpent = 0, entertainmentSpent = 0;
     private double foodLimit = 0, transportLimit = 0, entertainmentLimit = 0;
+    private double totalCategoryBudget = 0;
 
     @Nullable
     @Override
@@ -38,7 +40,6 @@ public class BudgetFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_budget, container, false);
 
-        // Bind views
         monthlyBudgetValue    = view.findViewById(R.id.monthlyBudgetValue);
         spentValue            = view.findViewById(R.id.spentValue);
         remainingValue        = view.findViewById(R.id.remainingValue);
@@ -47,19 +48,103 @@ public class BudgetFragment extends Fragment {
         transportProgress     = view.findViewById(R.id.transportProgress);
         entertainmentProgress = view.findViewById(R.id.entertainmentProgress);
 
-        // Get UID from parent
         firebaseUid = ((DashboardActivity) requireActivity()).getFirebaseUid();
 
-        // Load data
         loadBudgetLimits();
         loadSpendingSummary();
 
         Button updateBudgetButton = view.findViewById(R.id.updateBudgetButton);
-        updateBudgetButton.setOnClickListener(v ->
-                Toast.makeText(requireContext(), "Budget update feature coming next", Toast.LENGTH_SHORT).show()
-        );
+        updateBudgetButton.setOnClickListener(v -> showSetBudgetDialog());
 
         return view;
+    }
+
+    private static final String[] BUDGET_CATEGORIES = {
+            "food", "housing", "transportation", "entertainment",
+            "education", "technology", "health", "personal", "other"
+    };
+
+    private String capitalize(String s) {
+        if (s == null || s.isEmpty()) return "";
+        return s.substring(0, 1).toUpperCase() + s.substring(1);
+    }
+
+    private void showSetBudgetDialog() {
+        View dialogView = LayoutInflater.from(requireContext())
+                .inflate(R.layout.dialog_set_budget, null);
+
+        Spinner categorySpinner = dialogView.findViewById(R.id.categorySpinner);
+        EditText limitInput     = dialogView.findViewById(R.id.limitAmountInput);
+
+        String[] displayNames = new String[BUDGET_CATEGORIES.length];
+        for (int i = 0; i < BUDGET_CATEGORIES.length; i++) {
+            displayNames[i] = capitalize(BUDGET_CATEGORIES[i]);
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                requireContext(),
+                android.R.layout.simple_spinner_item,
+                displayNames
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categorySpinner.setAdapter(adapter);
+
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Set Budget Limit")
+                .setView(dialogView)
+                .setPositiveButton("Save", (dialog, which) -> {
+                    int index = categorySpinner.getSelectedItemPosition();
+                    String category = BUDGET_CATEGORIES[index];
+                    String amountStr = limitInput.getText().toString().trim();
+
+                    if (amountStr.isEmpty()) {
+                        Toast.makeText(requireContext(), "Please enter an amount", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    double amount;
+                    try {
+                        amount = Double.parseDouble(amountStr);
+                    } catch (NumberFormatException e) {
+                        Toast.makeText(requireContext(), "Invalid amount", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    saveBudgetLimit(category, amount);
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    private void saveBudgetLimit(String category, double amount) {
+        try {
+            JSONObject body = new JSONObject();
+            body.put("firebase_uid", firebaseUid);
+            body.put("category", category);
+            body.put("limit_amount", amount);
+
+            ApiClient.post("/budget", body, new ApiClient.ResponseCallback() {
+                @Override
+                public void onSuccess(String responseBody) {
+                    requireActivity().runOnUiThread(() -> {
+                        Toast.makeText(requireContext(),
+                                "Budget updated for " + category, Toast.LENGTH_SHORT).show();
+                        // Refresh displayed data
+                        loadBudgetLimits();
+                        loadSpendingSummary();
+                    });
+                }
+
+                @Override
+                public void onFailure(String error) {
+                    requireActivity().runOnUiThread(() ->
+                            Toast.makeText(requireContext(),
+                                    "Failed to save budget: " + error, Toast.LENGTH_SHORT).show()
+                    );
+                }
+            });
+        } catch (Exception e) {
+            Toast.makeText(requireContext(), "Error building request", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void loadBudgetLimits() {
@@ -81,6 +166,7 @@ public class BudgetFragment extends Fragment {
                                     case "food":           foodLimit = limit; break;
                                     case "transportation": transportLimit = limit; break;
                                     case "entertainment":  entertainmentLimit = limit; break;
+                                    default: break;
                                 }
                             }
 
