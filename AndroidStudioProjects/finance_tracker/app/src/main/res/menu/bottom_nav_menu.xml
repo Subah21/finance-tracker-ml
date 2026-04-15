@@ -3,22 +3,22 @@
 
     <item
         android:id="@+id/nav_dashboard"
-        android:title="Dashboard"
+        android:title="@string/dashboard"
         android:icon="@android:drawable/ic_menu_view"/>
 
     <item
         android:id="@+id/nav_budget"
-        android:title="Budget"
+        android:title="@string/budget"
         android:icon="@android:drawable/ic_menu_edit"/>
 
     <item
         android:id="@+id/nav_transactions"
-        android:title="Transactions"
+        android:title="@string/transactions"
         android:icon="@android:drawable/ic_menu_agenda"/>
 
     <item
         android:id="@+id/nav_profile"
-        android:title="Profile"
+        android:title="@string/profile"
         android:icon="@android:drawable/ic_menu_myplaces"/>
 
 </menu>
