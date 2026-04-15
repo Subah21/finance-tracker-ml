@@ -39,6 +39,12 @@
     <string name="spent_this_month">Spent This Month</string>
     <string name="activity_label">Activity</string>
     <string name="add_transaction">Add Transaction</string>
+    <string name="new_transaction">New Transaction</string>
+    <string name="amount_hint">Amount (e.g. 45.00)</string>
+    <string name="description_hint">Description (optional)</string>
+    <string name="select_category">Select category</string>
+    <string name="cancel">Cancel</string>
+    <string name="add">Add</string>
 
     <!-- Budget Screen -->
     <string name="budget_overview">Budget Overview</string>
