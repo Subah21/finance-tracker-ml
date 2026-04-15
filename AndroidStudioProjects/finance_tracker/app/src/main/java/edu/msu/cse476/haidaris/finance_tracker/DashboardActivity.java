@@ -23,6 +23,8 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Locale;
+
 public class DashboardActivity extends AppCompatActivity
         implements LocationHelper.WarningCallback {
 

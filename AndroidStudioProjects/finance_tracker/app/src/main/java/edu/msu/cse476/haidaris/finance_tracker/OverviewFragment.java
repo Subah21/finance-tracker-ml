@@ -16,22 +16,6 @@ import androidx.fragment.app.Fragment;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-/**
- * Tab 1 — shows the 3 key numbers:
- *   1. Safe to spend (income and the total spent this month)
- *   2. Income vs total spent (two small cards)
- *   3. Overspending risk % from ML model + progress bar
- *   4. ML user type (Saver or Balanced or Spender)
- *
- * API CALLS MADE:
- *   GET  /transactions/{uid}/summary  --> income, total_spent, safe_to_spend
- *   POST /predict                     --> risk_percent, user_type, tip
- *
- * CALL ORDER:
- *   loadSummary() runs first. When it succeeds, it calls loadPredictions()
- *   using the spending data from the summary. This ensures predictions
- *   always use fresh, current data.
- */
 public class OverviewFragment extends Fragment {
 
     private TextView txtSafeToSpend, txtIncomeSubtitle;
@@ -42,6 +26,13 @@ public class OverviewFragment extends Fragment {
 
     private String firebaseUid;
 
+    // Hold summary values so budget call can use them
+    private double cachedTotalSpent     = 0;
+    private double cachedFood           = 0;
+    private double cachedEntertainment  = 0;
+    private double cachedDiscretionary  = 0;
+    private String cachedMonth          = "";
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -49,7 +40,6 @@ public class OverviewFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
 
-        // Bind all views
         txtSafeToSpend    = view.findViewById(R.id.txtSafeToSpend);
         txtIncomeSubtitle = view.findViewById(R.id.txtIncomeSubtitle);
         txtIncome         = view.findViewById(R.id.txtIncome);
@@ -61,13 +51,17 @@ public class OverviewFragment extends Fragment {
         txtUserType       = view.findViewById(R.id.txtUserType);
         txtUserTypeTip    = view.findViewById(R.id.txtUserTypeTip);
 
-        // Get Firebase UID from parent DashboardActivity
         firebaseUid = ((DashboardActivity) requireActivity()).getFirebaseUid();
 
-        // Load data
         loadSummary();
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadSummary();
     }
 
     // Step 1: Load spending summary
@@ -79,30 +73,28 @@ public class OverviewFragment extends Fragment {
                     public void onSuccess(String body) {
                         try {
                             JSONObject json       = new JSONObject(body);
-                            double income         = json.getDouble("monthly_income");
                             double totalSpent     = json.getDouble("total_spent");
-                            double safeToSpend    = json.getDouble("safe_to_spend");
                             String month          = json.getString("month");
                             JSONObject byCategory = json.getJSONObject("by_category");
 
-                            // Calculate spending breakdown for ML call
                             double food          = byCategory.optDouble("food", 0);
                             double entertainment = byCategory.optDouble("entertainment", 0);
                             double discretionary = food + entertainment
                                     + byCategory.optDouble("misc", 0)
                                     + byCategory.optDouble("personal_care", 0);
 
-                            // Update UI on main thread
-                            requireActivity().runOnUiThread(() -> {
-                                txtSafeToSpend.setText("$" + String.format("%.2f", safeToSpend));
-                                txtIncomeSubtitle.setText("of $" + String.format("%.0f", income)
-                                        + " income · " + month);
-                                txtIncome.setText("$" + String.format("%.0f", income));
-                                txtTotalSpent.setText("$" + String.format("%.0f", totalSpent));
-                            });
+                            // Cache for use in budget callback
+                            cachedTotalSpent    = totalSpent;
+                            cachedFood          = food;
+                            cachedEntertainment = entertainment;
+                            cachedDiscretionary = discretionary;
+                            cachedMonth         = month;
 
-                            // Step 2: now call ML predictions using this data
-                            loadPredictions(income, totalSpent, food, entertainment, discretionary);
+                            requireActivity().runOnUiThread(() ->
+                                    txtTotalSpent.setText("$" + String.format(java.util.Locale.getDefault(), "%.0f", totalSpent)));
+
+                            // Step 2: load total budget to use as "income"
+                            loadBudgetTotal(totalSpent, food, entertainment, discretionary, month);
 
                         } catch (Exception e) {
                             showError("Could not load summary.");
@@ -116,7 +108,53 @@ public class OverviewFragment extends Fragment {
                 });
     }
 
-    // Step 2: Load ML predictions
+    // Step 2: Load budget total and use it as the income figure
+    private void loadBudgetTotal(double totalSpent, double food,
+                                 double entertainment, double discretionary,
+                                 String month) {
+        ApiClient.get("/budget/" + firebaseUid,
+                new ApiClient.ResponseCallback() {
+                    @Override
+                    public void onSuccess(String body) {
+                        try {
+                            JSONArray arr = new JSONArray(body);
+                            double totalBudget = 0;
+                            for (int i = 0; i < arr.length(); i++) {
+                                totalBudget += arr.getJSONObject(i).getDouble("limit_amount");
+                            }
+
+                            double safeToSpend = Math.max(0, totalBudget - totalSpent);
+                            double finalBudget = totalBudget;
+
+                            requireActivity().runOnUiThread(() -> {
+                                txtSafeToSpend.setText("$" + String.format(java.util.Locale.getDefault(), "%.2f", safeToSpend));
+                                txtIncomeSubtitle.setText("of $" + String.format(java.util.Locale.getDefault(), "%.0f", finalBudget)
+                                        + " budget · " + month);
+                                txtIncome.setText("$" + String.format(java.util.Locale.getDefault(), "%.0f", finalBudget));
+                            });
+
+                            // Step 3: ML predictions
+                            loadPredictions(finalBudget, totalSpent, food, entertainment, discretionary);
+
+                        } catch (Exception e) {
+                            // Budget load failed — fall back to $0
+                            requireActivity().runOnUiThread(() -> {
+                                txtSafeToSpend.setText("$0.00");
+                                txtIncomeSubtitle.setText("of $0 budget · " + month);
+                                txtIncome.setText("$0");
+                            });
+                            loadPredictions(0, totalSpent, food, entertainment, discretionary);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String error) {
+                        loadPredictions(0, totalSpent, food, entertainment, discretionary);
+                    }
+                });
+    }
+
+    // Step 3: Load ML predictions
     private void loadPredictions(double income, double totalSpent,
                                  double food, double entertainment,
                                  double discretionary) {
@@ -127,7 +165,6 @@ public class OverviewFragment extends Fragment {
             body.put("food_spend",          food);
             body.put("entertainment_spend", entertainment);
             body.put("discretionary_spend", discretionary);
-            // monthly_totals left empty
             body.put("monthly_totals",      new JSONArray());
 
             ApiClient.post("/predict", body, new ApiClient.ResponseCallback() {
@@ -139,8 +176,6 @@ public class OverviewFragment extends Fragment {
                         JSONObject riskJson = json.getJSONObject("risk");
                         JSONObject typeJson = json.getJSONObject("user_type");
 
-                        // ML server may be down — the objects will contain
-                        // an "error" key instead of real results
                         if (riskJson.has("error") || typeJson.has("error")) {
                             requireActivity().runOnUiThread(() -> {
                                 txtRiskPercent.setText("N/A");
@@ -167,7 +202,6 @@ public class OverviewFragment extends Fragment {
 
                 @Override
                 public void onFailure(String error) {
-                    // ML server not reachable for now, so it would show a placeholder
                     requireActivity().runOnUiThread(() -> {
                         txtRiskPercent.setText("N/A");
                         txtUserType.setText("N/A");
@@ -181,15 +215,12 @@ public class OverviewFragment extends Fragment {
         }
     }
 
-    // Update risk card and user type card
     private void updateRiskAndType(double riskPercent, boolean atRisk,
                                    String message, String userType, String tip) {
-        // Risk percent
         txtRiskPercent.setText((int) riskPercent + "%");
         txtRiskMessage.setText(message);
         riskProgressBar.setProgress((int) riskPercent);
 
-        // Color the progress bar and badge based on risk level
         if (riskPercent < 35) {
             riskProgressBar.setProgressTintList(
                     android.content.res.ColorStateList.valueOf(Color.parseColor("#1D9E75")));
@@ -210,12 +241,10 @@ public class OverviewFragment extends Fragment {
             txtRiskBadge.setTextColor(Color.parseColor("#A32D2D"));
         }
 
-        // User type
         txtUserType.setText(userType);
         txtUserTypeTip.setText(tip);
     }
 
-    // Helper which shows the toast error on main thread
     private void showError(String message) {
         if (getActivity() != null) {
             requireActivity().runOnUiThread(() ->
