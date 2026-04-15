@@ -1,4 +1,23 @@
 <resources>
+
+    <!--  General  -->
+    <string name="back">Back</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+
+    <!-- Login Screen -->
     <string name="app_name">finance_tracker</string>
     <string name="create_account">Create Account</string>
+    <string name="title">Finance Tracker</string>
+    <string name="login">Login</string>
+    <string name="signup_text">Don\'t have an account? Sign up!</string>
+    <string name="demo">Try Demo</string>
+
+
+    <!-- Budget Screen -->
+    <string name="budget_overview">Budget Overview</string>
+    <string name="monthly_budget">Monthly Budget</string>
+    <string name="spent">Spent</string>
+    <string name="remaining">Remaining</string>
+    <string name="update_budget">Update Budget</string>
 </resources>

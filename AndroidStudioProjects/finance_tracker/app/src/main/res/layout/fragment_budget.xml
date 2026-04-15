@@ -35,11 +35,11 @@
                 android:padding="16dp">
 
                 <TextView
-                    android:text="Monthly Budget"
-                    android:textSize="14sp"
-                    android:textColor="#666666"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:text="@string/monthly_budget"
+                    android:textColor="#666666"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/monthlyBudgetValue"
@@ -75,11 +75,11 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:text="Spent"
-                        android:textSize="14sp"
-                        android:textColor="#666666"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:text="@string/spent"
+                        android:textColor="#666666"
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/spentValue"
@@ -108,11 +108,11 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:text="Remaining"
-                        android:textSize="14sp"
-                        android:textColor="#666666"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:text="@string/remaining"
+                        android:textColor="#666666"
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/remainingValue"
@@ -242,7 +242,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="Update Budget" />
+                    android:text="@string/update_budget" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 

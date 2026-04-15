@@ -20,43 +20,46 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:text="Finance Tracker"
-                android:textSize="26sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="20dp"
-                android:layout_gravity="center"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="20dp"
+                android:text="@string/title"
+                android:textSize="26sp"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/emailInput"
-                android:hint="Email"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:inputType="textEmailAddress"
+                android:hint="@string/email" />
 
             <EditText
                 android:id="@+id/passwordInput"
-                android:hint="Password"
-                android:inputType="textPassword"
-                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:minHeight="48dp"
+                android:hint="@string/password"
+                android:inputType="textPassword" />
 
             <Button
                 android:id="@+id/loginButton"
-                android:text="Login"
-                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/login" />
 
             <TextView
                 android:id="@+id/signupText"
-                android:text="Don't have an account? Sign up"
-                android:textColor="#3F51B5"
-                android:layout_marginTop="15dp"
-                android:layout_gravity="center"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:text="@string/signup_text"
+                android:textColor="#3F51B5" />
 
         </LinearLayout>
 
@@ -64,10 +67,10 @@
 
     <Button
         android:id="@+id/demoButton"
-        android:text="Try Demo"
         style="@style/Widget.Material3.Button.OutlinedButton"
-        android:layout_marginTop="20dp"
         android:layout_width="320dp"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/demo" />
 
 </LinearLayout>
