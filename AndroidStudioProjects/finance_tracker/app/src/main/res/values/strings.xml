@@ -68,5 +68,14 @@
     <string name="category_label">Category</string>
     <string name="monthly_limit_label">Monthly Limit ($)</string>
     <string name="limit_amount_hint">e.g. 500.00</string>
+    <string name="budget_updated_for">Budget updated for %1$s</string>
+    <string name="budget_save_failed">Failed to save budget: %1$s</string>
+    <string name="budget_request_error">Error building request</string>
+    <string name="budget_enter_amount">Please enter an amount</string>
+    <string name="budget_invalid_amount">Invalid amount</string>
+    <string name="forecast_summary">You\'ve spent $%1$s this month across %2$d categories.</string>
+    <string name="currency_format">$%1$s</string>
+    <string name="could_not_load_spending">Could not load spending data.</string>
+    <string name="could_not_reach_server">Could not reach server.</string>
 
 </resources>

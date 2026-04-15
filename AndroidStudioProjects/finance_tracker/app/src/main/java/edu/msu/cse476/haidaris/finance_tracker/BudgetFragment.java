@@ -20,6 +20,8 @@ import androidx.fragment.app.Fragment;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.Locale;
+
 public class BudgetFragment extends Fragment {
 
     private String firebaseUid;
@@ -31,7 +33,11 @@ public class BudgetFragment extends Fragment {
     private double totalSpent  = 0;
     private double foodSpent = 0, transportSpent = 0, entertainmentSpent = 0;
     private double foodLimit = 0, transportLimit = 0, entertainmentLimit = 0;
-    private double totalCategoryBudget = 0;
+
+    private static final String[] BUDGET_CATEGORIES = {
+            "food", "housing", "transportation", "entertainment",
+            "education", "technology", "health", "personal", "other"
+    };
 
     @Nullable
     @Override
@@ -59,14 +65,16 @@ public class BudgetFragment extends Fragment {
         return view;
     }
 
-    private static final String[] BUDGET_CATEGORIES = {
-            "food", "housing", "transportation", "entertainment",
-            "education", "technology", "health", "personal", "other"
-    };
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadBudgetLimits();
+        loadSpendingSummary();
+    }
 
     private String capitalize(String s) {
         if (s == null || s.isEmpty()) return "";
-        return s.substring(0, 1).toUpperCase() + s.substring(1);
+        return s.substring(0, 1).toUpperCase(Locale.getDefault()) + s.substring(1);
     }
 
     private void showSetBudgetDialog() {
@@ -89,15 +97,16 @@ public class BudgetFragment extends Fragment {
         categorySpinner.setAdapter(adapter);
 
         new AlertDialog.Builder(requireContext())
-                .setTitle("Set Budget Limit")
+                .setTitle(R.string.set_budget_limit)
                 .setView(dialogView)
-                .setPositiveButton("Save", (dialog, which) -> {
+                .setPositiveButton(R.string.update_budget, (dialog, which) -> {
                     int index = categorySpinner.getSelectedItemPosition();
                     String category = BUDGET_CATEGORIES[index];
                     String amountStr = limitInput.getText().toString().trim();
 
                     if (amountStr.isEmpty()) {
-                        Toast.makeText(requireContext(), "Please enter an amount", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(),
+                                R.string.budget_enter_amount, Toast.LENGTH_SHORT).show();
                         return;
                     }
 
@@ -105,13 +114,14 @@ public class BudgetFragment extends Fragment {
                     try {
                         amount = Double.parseDouble(amountStr);
                     } catch (NumberFormatException e) {
-                        Toast.makeText(requireContext(), "Invalid amount", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(),
+                                R.string.budget_invalid_amount, Toast.LENGTH_SHORT).show();
                         return;
                     }
 
                     saveBudgetLimit(category, amount);
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
@@ -127,8 +137,8 @@ public class BudgetFragment extends Fragment {
                 public void onSuccess(String responseBody) {
                     requireActivity().runOnUiThread(() -> {
                         Toast.makeText(requireContext(),
-                                "Budget updated for " + category, Toast.LENGTH_SHORT).show();
-                        // Refresh displayed data
+                                getString(R.string.budget_updated_for, category),
+                                Toast.LENGTH_SHORT).show();
                         loadBudgetLimits();
                         loadSpendingSummary();
                     });
@@ -138,12 +148,14 @@ public class BudgetFragment extends Fragment {
                 public void onFailure(String error) {
                     requireActivity().runOnUiThread(() ->
                             Toast.makeText(requireContext(),
-                                    "Failed to save budget: " + error, Toast.LENGTH_SHORT).show()
+                                    getString(R.string.budget_save_failed, error),
+                                    Toast.LENGTH_SHORT).show()
                     );
                 }
             });
         } catch (Exception e) {
-            Toast.makeText(requireContext(), "Error building request", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(),
+                    R.string.budget_request_error, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -171,19 +183,20 @@ public class BudgetFragment extends Fragment {
                             }
 
                             requireActivity().runOnUiThread(() -> {
-                                monthlyBudgetValue.setText("$" + String.format("%.2f", totalBudget));
+                                monthlyBudgetValue.setText(getString(R.string.currency_format,
+                                        String.format(Locale.getDefault(), "%.2f", totalBudget)));
                                 updateProgressBars();
                                 updateRemaining();
                             });
 
                         } catch (Exception e) {
-                            setFallback(monthlyBudgetValue, "—");
+                            setFallback(monthlyBudgetValue, getString(R.string.placeholder));
                         }
                     }
 
                     @Override
                     public void onFailure(String error) {
-                        setFallback(monthlyBudgetValue, "—");
+                        setFallback(monthlyBudgetValue, getString(R.string.placeholder));
                     }
                 });
     }
@@ -203,24 +216,24 @@ public class BudgetFragment extends Fragment {
                             entertainmentSpent = byCategory.optDouble("entertainment", 0);
 
                             requireActivity().runOnUiThread(() -> {
-                                spentValue.setText("$" + String.format("%.0f", totalSpent));
-                                forecastText.setText("You've spent $" + String.format("%.0f", totalSpent)
-                                        + " this month across "
-                                        + byCategory.length() + " categories.");
+                                String spentFormatted = String.format(Locale.getDefault(), "%.2f", totalSpent);
+                                spentValue.setText(getString(R.string.currency_format, spentFormatted));
+                                forecastText.setText(getString(R.string.forecast_summary,
+                                        spentFormatted, byCategory.length()));
                                 updateProgressBars();
                                 updateRemaining();
                             });
 
                         } catch (Exception e) {
-                            setFallback(spentValue, "—");
-                            setFallback(forecastText, "Could not load spending data.");
+                            setFallback(spentValue, getString(R.string.placeholder));
+                            setFallback(forecastText, getString(R.string.could_not_load_spending));
                         }
                     }
 
                     @Override
                     public void onFailure(String error) {
-                        setFallback(spentValue, "—");
-                        setFallback(forecastText, "Could not reach server.");
+                        setFallback(spentValue, getString(R.string.placeholder));
+                        setFallback(forecastText, getString(R.string.could_not_reach_server));
                     }
                 });
     }
@@ -234,7 +247,8 @@ public class BudgetFragment extends Fragment {
     private void updateRemaining() {
         if (totalBudget > 0) {
             double remaining = Math.max(0, totalBudget - totalSpent);
-            remainingValue.setText("$" + String.format("%.0f", remaining));
+            remainingValue.setText(getString(R.string.currency_format,
+                    String.format(Locale.getDefault(), "%.2f", remaining)));
         }
     }
 
