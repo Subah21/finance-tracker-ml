@@ -1,170 +1,278 @@
 # Finance Tracker ML
 
-A mobile finance tracking application that integrates Android development, Firebase authentication, and machine learning models to analyze spending patterns.
+An AI-powered budget management Android app built for students. Tracks spending, predicts overspending risk using machine learning, and warns users when they are near a store while at financial risk using GPS location services.
+
+Built by Team: Sabah Al-Haidari, Daniel Gekonde, Omar Abdelmoneim, Rahil Patel — MSU CSE 476, Spring 2026.
+
+---
+
+## Live Backend
+
+The backend API is deployed and always running on Google Cloud Run:
+
+```
+https://finance-tracker-api-870049862947.us-central1.run.app
+```
+
+No local server setup is needed to run the Android app. The app points to this URL by default.
+
+---
 
 ## Tech Stack
 
-Frontend:
-- Android Studio
-- Java
-- XML Layouts
-- Material UI
+**Android**
+- Java + XML Layouts
+- Firebase Authentication
+- OkHttp for REST API calls
+- FusedLocationProviderClient (GPS)
+- RecyclerView, Material Design components
+- On-device Logistic Regression via `model_weights.json`
 
-Backend:
-- Python
-- FastAPI
+**Backend API** (port 8000)
+- Python, FastAPI, SQLAlchemy
+- PostgreSQL (production) / SQLite (local dev)
+- Deployed on Google Cloud Run
 
-Machine Learning:
-- Scikit-Learn
-- Pandas
-- NumPy
+**ML Server** (port 8001)
+- scikit-learn — K-Means Clustering, Logistic Regression
+- Prophet (Meta) — time-series spending forecasting
+- Trained on 2,700 rows of student spending data
 
-Database:
-- Firebase / SQL
+**Authentication**
+- Firebase Authentication (email/password + email verification)
+
+---
+
+## Features
+
+### Authentication
+- Email and password login via Firebase
+- Email verification required before first access
+- Auto-login for returning verified users
+- "Try Demo" button for instant dashboard access
+
+### Overview Tab
+- Safe to Spend — income minus all monthly spending
+- Overspending Risk % — Logistic Regression model (98.9% accuracy)
+- Spending Type — K-Means clustering: Saver / Balanced / Spender
+- Prophet forecast for next month's predicted spending
+
+### Transactions Tab
+- Full scrollable list of all transactions
+- Add Transaction dialog — amount, category dropdown, optional description
+- Real-time refresh after adding a transaction
+- Total spent this month shown at the top
+
+### Budget Tab
+- Per-category spending progress bars (Food, Transport, Entertainment)
+- Monthly Budget, Spent, and Remaining calculated live
+- Set Budget Limit dialog — updates limits instantly via the API
+
+### GPS Budget Mode
+- FusedLocationProviderClient polls location every 15 seconds
+- Detects proximity to malls, Walmart, Target, Best Buy, Kroger, and more
+- Runs on-device Logistic Regression model — no server call needed
+- Fires a push notification and shows a red warning banner when overspending risk is high
+
+### Machine Learning Models
+| Model | Type | Purpose |
+|-------|------|---------|
+| K-Means Clustering | Unsupervised | Classifies user as Saver, Balanced, or Spender |
+| Logistic Regression | Supervised | Predicts overspending risk 0–100% |
+| Prophet | Time-series | Forecasts next month's spending |
+
+---
+
+## Project Structure
+
+```
+finance_tracker/
+├── app/
+│   └── src/main/
+│       ├── java/edu/msu/cse476/haidaris/finance_tracker/
+│       │   ├── LoginActivity.java
+│       │   ├── SignupActivity.java
+│       │   ├── DashboardActivity.java
+│       │   ├── OverviewFragment.java
+│       │   ├── TransactionsFragment.java
+│       │   ├── TransactionAdapter.java
+│       │   ├── BudgetFragment.java
+│       │   ├── LocationHelper.java
+│       │   ├── NotificationHelper.java
+│       │   ├── OverspendingModel.java
+│       │   └── ApiClient.java
+│       ├── assets/
+│       │   └── model_weights.json        ← on-device ML model weights
+│       ├── res/
+│       │   ├── layout/
+│       │   └── values/strings.xml
+│       └── AndroidManifest.xml
+│
+├── backend_API/
+│   ├── main.py                           ← all REST endpoints
+│   ├── database.py                       ← SQLAlchemy models + PostgreSQL/SQLite support
+│   ├── schemas.py                        ← Pydantic request/response models
+│   ├── requirements.txt
+│   └── Procfile
+│
+├── backend_ML_models/
+│   ├── main.py                           ← ML prediction endpoints
+│   ├── model.py                          ← model training script
+│   ├── train_model.py                    ← loads CSVs and trains all 3 models
+│   ├── datasets/
+│   │   ├── student_spending.csv
+│   │   └── genz_money_spends.csv
+│   └── requirements.txt
+│
+├── demo_seed.py                          ← seeds database with realistic demo data
+└── README.md
+```
+
+---
 
 ## Setup Instructions
 
-### 1 Clone Repository
+### 1 — Clone the Repository
 
+```bash
 git clone https://github.com/Subah21/finance-tracker-ml.git
+cd finance-tracker-ml/AndroidStudioProjects/finance_tracker
+```
 
-### 2 Open Project
+### 2 — Add Firebase Configuration
 
-Open the project folder in Android Studio.
+Firebase requires a configuration file. To get it:
 
-### 3 Add Firebase Configuration
+1. Go to [Firebase Console](https://console.firebase.google.com)
+2. Open the Finance Tracker project
+3. Click the gear icon → Project Settings
+4. Scroll to Your Apps → select the Android app
+5. Click **Download google-services.json**
+6. Place it at:
 
-Place the file:
-
-app/google-services.json
-
-inside the app directory.
-
-
-# Firebase Setup (Required for Team Members)
-
-This project uses **Firebase Authentication**.  
-After cloning or pulling the repository, you must configure Firebase locally before running the app.
-
----
-
-## Step 1 — Pull the Latest Project
-
-If you already cloned the repository:
-
-git pull origin main
-
-If this is your first time:
-
-git clone https://github.com/Subah21/finance-tracker-ml.git
-cd finance_tracker
-
----
-
-## Step 2 — Download the Firebase Configuration File
-
-Firebase requires a configuration file called:
-
-google-services.json
-
-To download it:
-
-1. Go to the Firebase Console  
-   https://console.firebase.google.com
-
-2. Open the project used for this app
-
-3. Click the **gear icon (Project Settings)**
-
-4. Scroll down to **Your Apps**
-
-5. Select the **Android app**
-
-6. Click **Download google-services.json**
-
-Firebase generates this file so the Android app can connect to the correct Firebase project. 
-
----
-
-
-//////////////////////////
-
-## Step 3 — Add the File to the Android App
-
-Move the downloaded file into this directory:
-
+```
 finance_tracker/app/google-services.json
+```
 
-Your project structure should now look like:
+### 3 — Open in Android Studio
 
-finance_tracker
-│
-├── app
-│   ├── src
-│   ├── res
-│   └── google-services.json
-│
-├── backend_API
-├── backend_ML_models
-└── README.md
+Open the `finance_tracker` folder in Android Studio.
 
-The configuration file **must be placed inside the `app` module directory** so the Firebase Gradle plugin can read it during the build process.
+### 4 — Sync Gradle
 
----
-
-## Step 4 — Sync Gradle
-
-Open the project in **Android Studio** and run:
-
+```
 File → Sync Project with Gradle Files
+```
 
-This loads the Firebase SDK and configuration.
+### 5 — Run the App
+
+Run on an emulator or real Android device. The app connects to the deployed Cloud Run backend automatically — no local servers needed.
 
 ---
 
-## Step 5 — Run the Application
+## Running the Backend Locally (Optional)
 
-After syncing the project, run the app using an emulator or Android device.
+If you want to run the backend on your own machine instead of using Cloud Run:
 
-You should now be able to:
+### backend_API (port 8000)
 
-• Create a new account  
-• Log in  
-• Use Firebase authentication
+```bash
+cd backend_API
+python -m venv venv
+venv\Scripts\activate        # Windows
+source venv/bin/activate     # Mac/Linux
+pip install -r requirements.txt
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+```
+
+### backend_ML_models (port 8001)
+
+```bash
+cd backend_ML_models
+pip install -r requirements.txt
+python model.py              # train models first (generates .pkl files)
+uvicorn main:app --host 0.0.0.0 --port 8001 --reload
+```
+
+Then update `ApiClient.java`:
+
+```java
+// For emulator
+private static final String BASE_URL = "http://10.0.2.2:8000";
+
+// For real device (use your laptop's IP)
+private static final String BASE_URL = "http://YOUR_IP:8000";
+```
+
+---
+
+## Seeding Demo Data
+
+To populate the database with realistic fake transactions for testing:
+
+```bash
+pip install requests
+python demo_seed.py
+```
+
+This creates a demo user and inserts 20 transactions across 8 spending categories, sets budget limits, and verifies the ML predictions are working.
+
+Update `DEMO_UID` in `demo_seed.py` to match your Firebase UID before running.
+
+---
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/users` | Create or return existing user |
+| GET | `/users/{uid}` | Get user profile |
+| POST | `/transactions` | Log a new transaction |
+| GET | `/transactions/{uid}` | Get all transactions for user |
+| GET | `/transactions/{uid}/summary` | Monthly totals by category + safe to spend |
+| POST | `/budget` | Set a category spending limit |
+| GET | `/budget/{uid}` | Get all budget limits for user |
+| POST | `/predict` | Run all 3 ML models and return results |
+| POST | `/visits` | Log a GPS store visit |
+
+Interactive API docs available at:
+```
+https://finance-tracker-api-870049862947.us-central1.run.app/docs
+```
+
+---
+
+## Firebase Setup for Teammates
+
+After cloning, each team member must add their own `google-services.json`:
+
+1. Go to Firebase Console → Project Settings → Your Apps → Android app
+2. Download `google-services.json`
+3. Place it inside `finance_tracker/app/`
+4. Sync Gradle
+
+If you get a build error about Firebase not being configured, this file is missing.
 
 ---
 
 ## Troubleshooting
 
-If the app fails to build or Firebase does not work:
+| Problem | Fix |
+|---------|-----|
+| `Could not reach server` | Check `ApiClient.java` BASE_URL — should point to Cloud Run URL |
+| `CLEARTEXT communication not permitted` | Add `android:usesCleartextTraffic="true"` to AndroidManifest.xml |
+| Firebase skips login screen | Tap ⋮ menu → Logout to clear the cached session |
+| ML shows N/A | Make sure backend_ML_models server is running on port 8001 |
+| `google-services.json` missing | Download from Firebase Console and place in `app/` folder |
+| Gradle sync fails | File → Sync Project with Gradle Files |
 
-• Ensure the file name is exactly `google-services.json`  
-• Ensure it is located inside the `app/` folder  
-• Sync Gradle again
+---
 
-Firebase requires this configuration file to initialize the SDK and connect the Android app to the Firebase project.
+## Team Contributions
 
-//////////////////////////////
-
-### 4 Sync Gradle
-
-Click "Sync Project with Gradle Files".
-
-### 5 Run the App
-
-Run the project using an emulator or Android device.
-
-The application will launch the login screen.
-
-## Current Features
-
-- User authentication
-- Firebase login and signup
-- Dashboard UI
-- Navigation between screens
-
-## Upcoming Features
-
-- Spending analytics
-- Machine learning predictions
-- FastAPI backend integration
+| Member | Role | Key Contributions |
+|--------|------|-------------------|
+| Sabah Al-Haidari | Team Lead / Backend | FastAPI backend, Firebase auth, GPS feature, K-Means Clustering Model, Cloud Run deployment, demo seed script |
+| Daniel Gekonde | ML / Cloud | Logistics Regression Model, on-device model weights, Google Cloud Run + PostgreSQL, Add Transaction |
+| Omar Abdelmoneim | Frontend UI | Budget & Transactions tab UI, fragment layouts, progress bars, navigation |
+| Rahil Patel | Features / QA | Prophet Model, Budget fragment wiring, Set Budget dialog, strings.xml cleanup, UI polish |
